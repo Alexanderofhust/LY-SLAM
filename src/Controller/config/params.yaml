@@ -1,0 +1,42 @@
+mpc_controller:
+  ros__parameters:
+    # MPC parameters
+    prediction_horizon: 20
+    control_horizon: 10
+    time_step: 0.1
+
+    # Weight matrices (row-major order)
+    # State weight matrix (3x3) - Q matrix
+    # Format: [q_xx, q_xy, q_xθ, q_yx, q_yy, q_yθ, q_θx, q_θy, q_θθ]
+    state_weights: [10.0, 0.0, 0.0, 0.0, 10.0, 0.0, 0.0, 0.0, 5.0]
+
+    # Input weight matrix (2x2) - R matrix
+    # Format: [r_vv, r_vω, r_ωv, r_ωω]
+    input_weights: [1.0, 0.0, 0.0, 1.0]
+
+    # Input rate weight matrix (2x2) - R_rate matrix
+    # Format: [r_Δvv, r_Δvω, r_Δωv, r_Δωω]
+    input_rate_weights: [0.1, 0.0, 0.0, 0.1]
+
+    # Model parameters
+    wheel_radius: 0.1
+    wheel_base: 0.5
+    mass: 10.0
+    moment_of_inertia: 2.0
+
+    # Constraints
+    # Input constraints [min_v, min_ω]
+    min_input: [-0.5, -1.0]
+    # Input constraints [max_v, max_ω]
+    max_input: [0.5, 1.0]
+    # State constraints [min_x, min_y, min_θ]
+    min_state: [-10.0, -10.0, -3.14]
+    # State constraints [max_x, max_y, max_θ]
+    max_state: [10.0, 10.0, 3.14]
+
+    # Frame parameters
+    robot_frame: "base_link"
+    world_frame: "odom"
+
+    # Control rate (Hz)
+    control_rate: 10.0
