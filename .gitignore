@@ -42,6 +42,10 @@ qtcreator-*
 /planning/docs
 /planning/src
 
+# CLion
+/src/Controller/cmake-build-debug/
+
+
 *~
 
 # Emacs
