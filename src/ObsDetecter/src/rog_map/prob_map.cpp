@@ -224,30 +224,30 @@ void ProbMap::writeTimeConsumingToLog(std::ofstream& log_file) {
         if (i != time_consuming_.size() - 1)
             log_file << ", ";
     }
-    log_file << endl;
+    log_file << std::endl;
 }
 
 void ProbMap::writeMapInfoToLog(std::ofstream& log_file) {
-    log_file << "[ProbMap]" << endl;
-    log_file << "\tmap_size_d: " << cfg_.map_size_d.transpose() << endl;
-    log_file << "\tresolution: " << cfg_.resolution << endl;
-    log_file << "\tmap_size_i: " << sc_.map_size_i.transpose() << endl;
-    log_file << "\tlocal_update_box_size: " << cfg_.local_update_box_d.transpose() << endl;
-    log_file << "\tp_min: " << cfg_.p_min << endl;
-    log_file << "\tp_max: " << cfg_.p_max << endl;
-    log_file << "\tp_hit: " << cfg_.p_hit << endl;
-    log_file << "\tp_miss: " << cfg_.p_miss << endl;
-    log_file << "\tp_occ: " << cfg_.p_occ << endl;
-    log_file << "\tp_free: " << cfg_.p_free << endl;
-    log_file << "\tunk_thresh: " << cfg_.unk_thresh << endl;
-    log_file << "\tmap_sliding_thresh: " << cfg_.map_sliding_thresh << endl;
-    log_file << "\tmap_sliding_en: " << cfg_.map_sliding_en << endl;
-    log_file << "\tfix_map_origin: " << cfg_.fix_map_origin.transpose() << endl;
-    log_file << "\tvisualization_range: " << cfg_.visualization_range.transpose() << endl;
-    log_file << "\tvirtual_ceil_height: " << cfg_.virtual_ceil_height << endl;
-    log_file << "\tvirtual_ground_height: " << cfg_.virtual_ground_height << endl;
-    log_file << "\tbatch_update_size: " << cfg_.batch_update_size << endl;
-    log_file << "\tfrontier_extraction_en: " << cfg_.frontier_extraction_en << endl;
+    log_file << "[ProbMap]" << std::endl;
+    log_file << "\tmap_size_d: " << cfg_.map_size_d.transpose() << std::endl;
+    log_file << "\tresolution: " << cfg_.resolution << std::endl;
+    log_file << "\tmap_size_i: " << sc_.map_size_i.transpose() << std::endl;
+    log_file << "\tlocal_update_box_size: " << cfg_.local_update_box_d.transpose() << std::endl;
+    log_file << "\tp_min: " << cfg_.p_min << std::endl;
+    log_file << "\tp_max: " << cfg_.p_max << std::endl;
+    log_file << "\tp_hit: " << cfg_.p_hit << std::endl;
+    log_file << "\tp_miss: " << cfg_.p_miss << std::endl;
+    log_file << "\tp_occ: " << cfg_.p_occ << std::endl;
+    log_file << "\tp_free: " << cfg_.p_free << std::endl;
+    log_file << "\tunk_thresh: " << cfg_.unk_thresh << std::endl;
+    log_file << "\tmap_sliding_thresh: " << cfg_.map_sliding_thresh << std::endl;
+    log_file << "\tmap_sliding_en: " << cfg_.map_sliding_en << std::endl;
+    log_file << "\tfix_map_origin: " << cfg_.fix_map_origin.transpose() << std::endl;
+    log_file << "\tvisualization_range: " << cfg_.visualization_range.transpose() << std::endl;
+    log_file << "\tvirtual_ceil_height: " << cfg_.virtual_ceil_height << std::endl;
+    log_file << "\tvirtual_ground_height: " << cfg_.virtual_ground_height << std::endl;
+    log_file << "\tbatch_update_size: " << cfg_.batch_update_size << std::endl;
+    log_file << "\tfrontier_extraction_en: " << cfg_.frontier_extraction_en << std::endl;
     inf_map_->writeMapInfoToLog(log_file);
 }
 

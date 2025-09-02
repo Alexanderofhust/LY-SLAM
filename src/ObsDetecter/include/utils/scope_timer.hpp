@@ -33,7 +33,13 @@ namespace rog_map {
     class TimeConsuming {
 
     public:
-        TimeConsuming();
+        TimeConsuming() {
+            // 添加默认构造函数实现
+            repeat_time_ = 1;
+            has_shown = false;
+            print_ = true;
+            enable_ = true;
+        }
 
         TimeConsuming(std::string msg, int repeat_time) {
             repeat_time_ = repeat_time;
@@ -110,4 +116,3 @@ namespace rog_map {
         bool print_{true};
     };
 }
-

@@ -24,13 +24,13 @@
 #pragma once
 
 #include "utils/common_lib.hpp"
-#include "std_msgs/ColorRGBA.h"
-#include "visualization_msgs/MarkerArray.h"
+#include "std_msgs/msg/color_rgba.hpp"
+#include "visualization_msgs/msg/marker_array.hpp"
 
 namespace rog_map {
-    class Color : public std_msgs::ColorRGBA {
+    class Color : public std_msgs::msg::ColorRGBA {
     public:
-        Color() : std_msgs::ColorRGBA() {}
+        Color() : std_msgs::msg::ColorRGBA() {}
 
         Color(int hex_color) {
             int _r = (hex_color >> 16) & 0xFF;
@@ -90,17 +90,17 @@ namespace rog_map {
 
 
 /* Type A, directly publish marker in publisher */
-    static void visualizeText(const ros::Publisher &pub,
+    static void visualizeText(const rclcpp::Publisher<visualization_msgs::msg::MarkerArray>::SharedPtr &pub,
                               const std::string &ns,
                               const std::string &text,
                               const Vec3f &position,
                               const Color &c,
                               const double &size,
                               const int &id = -1) {
-        visualization_msgs::Marker marker;
+        visualization_msgs::msg::Marker marker;
         marker.header.frame_id = "world";
-        marker.header.stamp = ros::Time::now();
-        marker.action = visualization_msgs::Marker::ADD;
+        marker.header.stamp = rclcpp::Clock().now();
+        marker.action = visualization_msgs::msg::Marker::ADD;
         marker.pose.orientation.w = 1.0;
         marker.ns = ns.c_str();
         if (id >= 0) {
@@ -109,7 +109,7 @@ namespace rog_map {
             static int id = 0;
             marker.id = id++;
         }
-        marker.type = visualization_msgs::Marker::TEXT_VIEW_FACING;
+        marker.type = visualization_msgs::msg::Marker::TEXT_VIEW_FACING;
         marker.scale.z = size;
         marker.color = c;
         marker.text = text;
@@ -117,37 +117,37 @@ namespace rog_map {
         marker.pose.position.y = position.y();
         marker.pose.position.z = position.z();
         marker.pose.orientation.w = 1.0;
-        visualization_msgs::MarkerArray arr;
+        visualization_msgs::msg::MarkerArray arr;
         arr.markers.push_back(marker);
-        pub.publish(arr);
+        pub->publish(arr);
     };
 
-    static void visualizePoint(const ros::Publisher &pub_,
+    static void visualizePoint(const rclcpp::Publisher<visualization_msgs::msg::MarkerArray>::SharedPtr &pub_,
                                const Vec3f &pt,
                                Color color = Color::Pink(),
                                std::string ns = "pt",
                                double size = 0.1, int id = -1,
                                const bool &print_ns = true) {
-        visualization_msgs::MarkerArray mkr_arr;
-        visualization_msgs::Marker marker_ball;
+        visualization_msgs::msg::MarkerArray mkr_arr;
+        visualization_msgs::msg::Marker marker_ball;
         static int cnt = 0;
         Vec3f cur_pos = pt;
         if (isnan(pt.x()) || isnan(pt.y()) || isnan(pt.z())) {
             return;
         }
         marker_ball.header.frame_id = "world";
-        marker_ball.header.stamp = ros::Time::now();
+        marker_ball.header.stamp = rclcpp::Clock().now();
         marker_ball.ns = ns.c_str();
         marker_ball.id = id >= 0 ? id : cnt++;
-        marker_ball.action = visualization_msgs::Marker::ADD;
+        marker_ball.action = visualization_msgs::msg::Marker::ADD;
         marker_ball.pose.orientation.w = 1.0;
-        marker_ball.type = visualization_msgs::Marker::SPHERE;
+        marker_ball.type = visualization_msgs::msg::Marker::SPHERE;
         marker_ball.scale.x = size;
         marker_ball.scale.y = size;
         marker_ball.scale.z = size;
         marker_ball.color = color;
 
-        geometry_msgs::Point p;
+        geometry_msgs::msg::Point p;
         p.x = cur_pos.x();
         p.y = cur_pos.y();
         p.z = cur_pos.z();
@@ -157,10 +157,10 @@ namespace rog_map {
 
         // add test
         if (print_ns) {
-            visualization_msgs::Marker marker;
+            visualization_msgs::msg::Marker marker;
             marker.header.frame_id = "world";
-            marker.header.stamp = ros::Time::now();
-            marker.action = visualization_msgs::Marker::ADD;
+            marker.header.stamp = rclcpp::Clock().now();
+            marker.action = visualization_msgs::msg::Marker::ADD;
             marker.pose.orientation.w = 1.0;
             marker.ns = ns + "_text";
             if (id >= 0) {
@@ -169,7 +169,7 @@ namespace rog_map {
                 static int id = 0;
                 marker.id = id++;
             }
-            marker.type = visualization_msgs::Marker::TEXT_VIEW_FACING;
+            marker.type = visualization_msgs::msg::Marker::TEXT_VIEW_FACING;
             marker.scale.z = 0.6;
             marker.color = color;
             marker.text = ns;
@@ -180,10 +180,10 @@ namespace rog_map {
             mkr_arr.markers.push_back(marker);
         }
 
-        pub_.publish(mkr_arr);
+        pub_->publish(mkr_arr);
     }
 
-    static void visualizeBoundingBox(const ros::Publisher &pub,
+    static void visualizeBoundingBox(const rclcpp::Publisher<visualization_msgs::msg::MarkerArray>::SharedPtr &pub,
                                      const Vec3f &box_min,
                                      const Vec3f &box_max,
                                      const string &ns,
@@ -196,23 +196,23 @@ namespace rog_map {
         double width = size.x();
         double length = size.y();
         double hight = size.z();
-        visualization_msgs::MarkerArray mkrarr;
+        visualization_msgs::msg::MarkerArray mkrarr;
 //Publish Bounding box
         int id = 0;
-        visualization_msgs::Marker line_strip;
-        line_strip.header.stamp = ros::Time::now();
+        visualization_msgs::msg::Marker line_strip;
+        line_strip.header.stamp = rclcpp::Clock().now();
         line_strip.header.frame_id = "world";
-        line_strip.action = visualization_msgs::Marker::ADD;
+        line_strip.action = visualization_msgs::msg::Marker::ADD;
         line_strip.ns = ns;
         line_strip.pose.orientation.w = 1.0;
         line_strip.id = id++; //unique id, useful when multiple markers exist.
-        line_strip.type = visualization_msgs::Marker::LINE_STRIP; //marker type
+        line_strip.type = visualization_msgs::msg::Marker::LINE_STRIP; //marker type
         line_strip.scale.x = size_x;
 
 
         line_strip.color = color;
         line_strip.color.a = alpha; //不透明度，设0则全透明
-        geometry_msgs::Point p[8];
+        geometry_msgs::msg::Point p[8];
 
         //vis_pos_world是目标物的坐标
         p[0].x = vis_pos_world(0) - width;
@@ -254,21 +254,21 @@ namespace rog_map {
         line_strip.points.push_back(p[7]);
         line_strip.points.push_back(p[4]);
         mkrarr.markers.push_back(line_strip);
-        pub.publish(mkrarr);
+        pub->publish(mkrarr);
     }
 
     /* Type B: Add marker to given marker_arr for later publish */
-    static void visualizeText(visualization_msgs::MarkerArray &mkr_arr,
+    static void visualizeText(visualization_msgs::msg::MarkerArray &mkr_arr,
                               const std::string &ns,
                               const std::string &text,
                               const Vec3f &position,
                               const Color &c = Color::White(),
                               const double &size = 0.6,
                               const int &id = -1) {
-        visualization_msgs::Marker marker;
+        visualization_msgs::msg::Marker marker;
         marker.header.frame_id = "world";
-        marker.header.stamp = ros::Time::now();
-        marker.action = visualization_msgs::Marker::ADD;
+        marker.header.stamp = rclcpp::Clock().now();
+        marker.action = visualization_msgs::msg::Marker::ADD;
         marker.pose.orientation.w = 1.0;
         marker.ns = ns.c_str();
         if (id >= 0) {
@@ -277,7 +277,7 @@ namespace rog_map {
             static int id = 0;
             marker.id = id++;
         }
-        marker.type = visualization_msgs::Marker::TEXT_VIEW_FACING;
+        marker.type = visualization_msgs::msg::Marker::TEXT_VIEW_FACING;
         marker.scale.z = size;
         marker.color = c;
         marker.text = text;
@@ -288,31 +288,31 @@ namespace rog_map {
         mkr_arr.markers.push_back(marker);
     };
 
-    static void visualizePoint(visualization_msgs::MarkerArray &mkr_arr,
+    static void visualizePoint(visualization_msgs::msg::MarkerArray &mkr_arr,
                                const Vec3f &pt,
                                Color color = Color::Pink(),
                                std::string ns = "pt",
                                double size = 0.1, int id = -1,
                                const bool &print_ns = true) {
-        visualization_msgs::Marker marker_ball;
+        visualization_msgs::msg::Marker marker_ball;
         static int cnt = 0;
         Vec3f cur_pos = pt;
         if (isnan(pt.x()) || isnan(pt.y()) || isnan(pt.z())) {
             return;
         }
         marker_ball.header.frame_id = "world";
-        marker_ball.header.stamp = ros::Time::now();
+        marker_ball.header.stamp = rclcpp::Clock().now();
         marker_ball.ns = ns.c_str();
         marker_ball.id = id >= 0 ? id : cnt++;
-        marker_ball.action = visualization_msgs::Marker::ADD;
+        marker_ball.action = visualization_msgs::msg::Marker::ADD;
         marker_ball.pose.orientation.w = 1.0;
-        marker_ball.type = visualization_msgs::Marker::SPHERE;
+        marker_ball.type = visualization_msgs::msg::Marker::SPHERE;
         marker_ball.scale.x = size;
         marker_ball.scale.y = size;
         marker_ball.scale.z = size;
         marker_ball.color = color;
 
-        geometry_msgs::Point p;
+        geometry_msgs::msg::Point p;
         p.x = cur_pos.x();
         p.y = cur_pos.y();
         p.z = cur_pos.z();
@@ -322,10 +322,10 @@ namespace rog_map {
 
         // add test
         if (print_ns) {
-            visualization_msgs::Marker marker;
+            visualization_msgs::msg::Marker marker;
             marker.header.frame_id = "world";
-            marker.header.stamp = ros::Time::now();
-            marker.action = visualization_msgs::Marker::ADD;
+            marker.header.stamp = rclcpp::Clock().now();
+            marker.action = visualization_msgs::msg::Marker::ADD;
             marker.pose.orientation.w = 1.0;
             marker.ns = ns + "_text";
             if (id >= 0) {
@@ -334,7 +334,7 @@ namespace rog_map {
                 static int id = 0;
                 marker.id = id++;
             }
-            marker.type = visualization_msgs::Marker::TEXT_VIEW_FACING;
+            marker.type = visualization_msgs::msg::Marker::TEXT_VIEW_FACING;
             marker.scale.z = 0.6;
             marker.color = color;
             marker.text = ns;
@@ -346,7 +346,7 @@ namespace rog_map {
         }
     }
 
-    static void visualizeBoundingBox(visualization_msgs::MarkerArray &mkrarr,
+    static void visualizeBoundingBox(visualization_msgs::msg::MarkerArray &mkrarr,
                                      const Vec3f &box_min,
                                      const Vec3f &box_max,
                                      const string &ns,
@@ -362,20 +362,20 @@ namespace rog_map {
 
 //Publish Bounding box
         int id = 0;
-        visualization_msgs::Marker line_strip;
-        line_strip.header.stamp = ros::Time::now();
+        visualization_msgs::msg::Marker line_strip;
+        line_strip.header.stamp = rclcpp::Clock().now();
         line_strip.header.frame_id = "world";
-        line_strip.action = visualization_msgs::Marker::ADD;
+        line_strip.action = visualization_msgs::msg::Marker::ADD;
         line_strip.ns = ns;
         line_strip.pose.orientation.w = 1.0;
         line_strip.id = id++; //unique id, useful when multiple markers exist.
-        line_strip.type = visualization_msgs::Marker::LINE_STRIP; //marker type
+        line_strip.type = visualization_msgs::msg::Marker::LINE_STRIP; //marker type
         line_strip.scale.x = size_x;
 
 
         line_strip.color = color;
         line_strip.color.a = alpha; //不透明度，设0则全透明
-        geometry_msgs::Point p[8];
+        geometry_msgs::msg::Point p[8];
 
         //vis_pos_world是目标物的坐标
         p[0].x = vis_pos_world(0) - width;
@@ -420,4 +420,3 @@ namespace rog_map {
     }
 
 }
-

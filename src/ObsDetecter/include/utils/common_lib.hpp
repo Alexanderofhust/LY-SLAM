@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include <ros/ros.h>
+#include <rclcpp/rclcpp.hpp>
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
 #include <pcl_conversions/pcl_conversions.h>
@@ -89,8 +89,6 @@ namespace rog_map {
 
 
 #define SIGN(x) ((x > 0) - (x < 0))
-#define DEBUG_FILE_DIR(name) (string(string(ROOT_DIR) + "log/"+name))
-#define PCD_FILE_DIR(name) (string(string(ROOT_DIR) + "pcd/"+name))
 
     template<typename T>
     std::ostream &operator<<(std::ostream &out, const std::vector<T> &v) {
@@ -215,4 +213,3 @@ namespace rog_map {
         return false;
     }
 }
-

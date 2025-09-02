@@ -76,5 +76,3 @@ namespace rog_map {
         };
     }
 }
-
-
